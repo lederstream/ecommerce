@@ -74,7 +74,7 @@
     async function comprar() {
       const { error } = await supabase.rpc("hacer_compra", {
         _cliente_id: user.id,
-        _servicio_id: "id_del_servicio", // ← cambia esto por un id real de tu tabla servicios
+        _servicio_id: "id", // ← cambia esto por un id real de tu tabla servicios
         _costo: 5
       });
 
