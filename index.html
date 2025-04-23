@@ -1,89 +1,52 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Prueba Supabase Streaming Store</title>
+  <title>Prueba de compra</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
-<h2>Elegir Servicio</h2>
-<input id="servicio_id" placeholder="ID del Servicio">
 
-<h2>Acciones</h2>
-<button onclick="recargar()">Recargar 10 créditos</button>
-<button onclick="comprar()">Comprar servicio (5 créditos)</button>
+  <h2>Elegir servicio</h2>
+  <input type="text" id="servicio_id" placeholder="ID del servicio">
 
+  <h3>Acciones</h3>
+  <button onclick="recargar()">Recargar 10 créditos</button>
+  <button onclick="comprar()">Comprar servicio (5 créditos)</button>
 
   <script>
-    const supabaseUrl = 'https://brzsayjqohyhpssfgqct.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJyenNheWpxb2h5aHBzc2ZncWN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwMTU5MzYsImV4cCI6MjA2MDU5MTkzNn0.4JNO1yeUcuSnJXOMN_bZRlugDQZFbkyqYgWyQYkUFF8';
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    const supabase = supabase.createClient(
+      'https://brzsayjqohyhpssfgqct.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJyenNheWpxb2h5aHBzc2ZncWN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwMTU5MzYsImV4cCI6MjA2MDU5MTkzNn0.4JNO1yeUcuSnJXOMN_bZRlugDQZFbkyqYgWyQYkUFF8'
+    );
 
-    let user;
-
-    async function login() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-      if (error) {
-        alert("Error al iniciar sesión: " + error.message);
-        return;
-      }
-
-      user = data.user;
-      alert("Sesión iniciada con éxito");
-      cargarCreditos();
-    }
-
-    async function cargarCreditos() {
-      const { data, error } = await supabase
-        .from("usuarios")
-        .select("creditos")
-        .eq("id", user.id)
-        .single();
-
-      if (error) {
-        alert("Error al obtener créditos: " + error.message);
-        return;
-      }
-
-      document.getElementById("creditos").innerText = `${data.creditos} créditos disponibles`;
-    }
+    const usuario_id = "tu_usuario_id_aqui"; // reemplaza con el ID real del usuario
 
     async function recargar() {
-      const { error } = await supabase.rpc("recargar_creditos", {
-        _usuario_id: user.id,
-        _monto: 10
-      });
+      const { error } = await supabase
+        .from("recargas")
+        .insert([{ usuario_id, cantidad: 10 }]);
 
       if (error) {
         alert("Error al recargar: " + error.message);
-        return;
+      } else {
+        alert("Recarga realizada");
       }
-
-      alert("Créditos recargados");
-      cargarCreditos();
     }
 
-async function comprar() {
-  const servicioId = document.getElementById("servicio_id").value;
+    async function comprar() {
+      const servicio_id = document.getElementById("servicio_id").value;
 
-  const { error } = await supabase.rpc("hacer_compra", {
-    _cliente_id: user.id,
-    _servicio_id: 5cca0721-e0d5-493e-9246-071df3f15229,
-    _costo: 5
-  });
+      const { error } = await supabase
+        .from("compras")
+        .insert([{ cliente_id: usuario_id, servicio_id }]);
 
-  if (error) {
-    alert("Error al comprar: " + error.message);
-    return;
-  }
-
-  alert("Compra realizada");
-  cargarCreditos();
-}
+      if (error) {
+        alert("Error al comprar: " + error.message);
+      } else {
+        alert("Compra realizada");
+      }
+    }
   </script>
+
 </body>
 </html>
