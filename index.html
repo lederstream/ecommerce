@@ -54,23 +54,44 @@
       obtenerCreditos();
     }
 
-    async function comprar() {
-      const user = (await supabase.auth.getUser()).data.user;
-      if (!user) return alert('No estás autenticado');
+async function comprar() {
+  const user = (await supabase.auth.getUser()).data.user;
+  if (!user) return alert('No estás autenticado');
 
-      const servicioId = document.getElementById('servicioSelect').value;
-      if (!servicioId) return alert('Selecciona un servicio');
+  const servicioId = document.getElementById('servicioSelect').value;
+  if (!servicioId) return alert('Selecciona un servicio');
 
-      try {
-        await supabase.from('compras').insert([{ cliente_id: user.id, servicio_id: servicioId }]);
-        alert('¡Compra realizada!');
-      } catch (err) {
-        alert('Error al comprar: ' + err.message);
-      }
-      obtenerCreditos();
-    }
+  const servicio = servicios.find(s => s.id == servicioId);
+  if (!servicio) return alert('Servicio no encontrado');
+
+  // Obtener créditos del usuario
+  const { data: usuario, error: errorUsuario } = await supabase
+    .from('usuarios')
+    .select('creditos')
+    .eq('id', user.id)
+    .single();
+
+  if (errorUsuario || !usuario) {
+    return alert('No se pudieron obtener los créditos del usuario.');
+  }
+
+  if (usuario.creditos < servicio.precio) {
+    return alert('No tienes créditos suficientes.');
+  }
+
+  // Realizar la compra
+  try {
+    await supabase.from('compras').insert([{ cliente_id: user.id, servicio_id: servicioId }]);
+    alert('¡Compra realizada!');
+    obtenerCreditos();
+  } catch (err) {
+    alert('Error al comprar: ' + err.message);
+  }
+}
+
 
     cargarServicios();
+    obtenerCreditos();
     
     async function obtenerCreditos() {
   const user = (await supabase.auth.getUser()).data.user;
