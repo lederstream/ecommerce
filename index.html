@@ -6,17 +6,13 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
-  <h2>Iniciar sesión</h2>
-  <input id="email" placeholder="Email">
-  <input id="password" type="password" placeholder="Contraseña">
-  <button onclick="login()">Ingresar</button>
+<h2>Elegir Servicio</h2>
+<input id="servicio_id" placeholder="ID del Servicio">
 
-  <h2>Créditos del Usuario</h2>
-  <p id="creditos">Cargando...</p>
+<h2>Acciones</h2>
+<button onclick="recargar()">Recargar 10 créditos</button>
+<button onclick="comprar()">Comprar servicio (5 créditos)</button>
 
-  <h2>Acciones</h2>
-  <button onclick="recargar()">Recargar 10 créditos</button>
-  <button onclick="comprar()">Comprar servicio (5 créditos)</button>
 
   <script>
     const supabaseUrl = 'https://brzsayjqohyhpssfgqct.supabase.co';
@@ -71,21 +67,23 @@
       cargarCreditos();
     }
 
-    async function comprar() {
-      const { error } = await supabase.rpc("hacer_compra", {
-        _cliente_id: user.id,
-        _servicio_id: "id", // ← cambia esto por un id real de tu tabla servicios
-        _costo: 5
-      });
+async function comprar() {
+  const servicioId = document.getElementById("servicio_id").value;
 
-      if (error) {
-        alert("Error al comprar: " + error.message);
-        return;
-      }
+  const { error } = await supabase.rpc("hacer_compra", {
+    _cliente_id: user.id,
+    _servicio_id: servicioId,
+    _costo: 5
+  });
 
-      alert("Compra realizada");
-      cargarCreditos();
-    }
+  if (error) {
+    alert("Error al comprar: " + error.message);
+    return;
+  }
+
+  alert("Compra realizada");
+  cargarCreditos();
+}
   </script>
 </body>
 </html>
