@@ -1,53 +1,73 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Prueba de compra</title>
+  <title>Compra de Servicios</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
-
   <h2>Elegir servicio</h2>
-  <input type="text" id="servicio_id" placeholder="ID del servicio">
+  <select id="servicioSelect" onchange="mostrarPrecio()"></select>
+  <p id="precioServicio">Precio: -</p>
 
-  <h3>Acciones</h3>
+  <h2>Acciones</h2>
   <button onclick="recargar()">Recargar 10 créditos</button>
-  <button onclick="comprar()">Comprar servicio (5 créditos)</button>
+  <button onclick="comprar()">Comprar servicio</button>
 
   <script>
-    // 🔧 INICIALIZAR SUPABASE ANTES DE USARLO
-    const supabase = window.supabase.createClient(
+    const supabase = supabase.createClient(
       'https://brzsayjqohyhpssfgqct.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJyenNheWpxb2h5aHBzc2ZncWN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwMTU5MzYsImV4cCI6MjA2MDU5MTkzNn0.4JNO1yeUcuSnJXOMN_bZRlugDQZFbkyqYgWyQYkUFF8'
+      'YOUR_PUBLIC_ANON_KEY'
     );
 
-    const usuario_id = "ce1f4e16-261f-44d6-b19d-4c4b298328a3"; // 🔁 Cambia por el ID real
+    let servicios = [];
+
+    async function cargarServicios() {
+      const { data, error } = await supabase.from('servicios').select('*');
+      if (error) {
+        console.error('Error al cargar servicios:', error);
+        return;
+      }
+      servicios = data;
+      const select = document.getElementById('servicioSelect');
+      data.forEach(servicio => {
+        const option = document.createElement('option');
+        option.value = servicio.id;
+        option.textContent = servicio.nombre;
+        select.appendChild(option);
+      });
+    }
+
+    function mostrarPrecio() {
+      const selectedId = document.getElementById('servicioSelect').value;
+      const servicio = servicios.find(s => s.id == selectedId);
+      if (servicio) {
+        document.getElementById('precioServicio').innerText = `Precio: ${servicio.precio} créditos`;
+      }
+    }
 
     async function recargar() {
-      const { error } = await supabase
-        .from("recargas")
-        .insert([{ usuario_id, cantidad: 10 }]);
-
-      if (error) {
-        alert("❌ Error al recargar: " + error.message);
-      } else {
-        alert("✅ Recarga realizada con éxito");
-      }
+      const user = (await supabase.auth.getUser()).data.user;
+      if (!user) return alert('No estás autenticado');
+      await supabase.from('recargas').insert([{ usuario_id: user.id, cantidad: 10 }]);
+      alert('¡Créditos recargados!');
     }
 
     async function comprar() {
-      const servicio_id = document.getElementById("servicio_id").value;
+      const user = (await supabase.auth.getUser()).data.user;
+      if (!user) return alert('No estás autenticado');
 
-      const { error } = await supabase
-        .from("compras")
-        .insert([{ cliente_id: usuario_id, servicio_id }]);
+      const servicioId = document.getElementById('servicioSelect').value;
+      if (!servicioId) return alert('Selecciona un servicio');
 
-      if (error) {
-        alert("❌ Error al comprar: " + error.message);
-      } else {
-        alert("✅ Compra realizada con éxito");
+      try {
+        await supabase.from('compras').insert([{ cliente_id: user.id, servicio_id: servicioId }]);
+        alert('¡Compra realizada!');
+      } catch (err) {
+        alert('Error al comprar: ' + err.message);
       }
     }
-  </script>
 
+    cargarServicios();
+  </script>
 </body>
 </html>
