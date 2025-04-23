@@ -14,12 +14,13 @@
   <button onclick="comprar()">Comprar servicio (5 créditos)</button>
 
   <script>
-    const supabase = supabase.createClient(
+    // 🔧 INICIALIZAR SUPABASE ANTES DE USARLO
+    const supabase = window.supabase.createClient(
       'https://brzsayjqohyhpssfgqct.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJyenNheWpxb2h5aHBzc2ZncWN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwMTU5MzYsImV4cCI6MjA2MDU5MTkzNn0.4JNO1yeUcuSnJXOMN_bZRlugDQZFbkyqYgWyQYkUFF8'
     );
 
-    const usuario_id = "ce1f4e16-261f-44d6-b19d-4c4b298328a3"; // reemplaza con el ID real del usuario
+    const usuario_id = "ce1f4e16-261f-44d6-b19d-4c4b298328a3"; // 🔁 Cambia por el ID real
 
     async function recargar() {
       const { error } = await supabase
@@ -27,9 +28,9 @@
         .insert([{ usuario_id, cantidad: 10 }]);
 
       if (error) {
-        alert("Error al recargar: " + error.message);
+        alert("❌ Error al recargar: " + error.message);
       } else {
-        alert("Recarga realizada");
+        alert("✅ Recarga realizada con éxito");
       }
     }
 
@@ -41,9 +42,9 @@
         .insert([{ cliente_id: usuario_id, servicio_id }]);
 
       if (error) {
-        alert("Error al comprar: " + error.message);
+        alert("❌ Error al comprar: " + error.message);
       } else {
-        alert("Compra realizada");
+        alert("✅ Compra realizada con éxito");
       }
     }
   </script>
