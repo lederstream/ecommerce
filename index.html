@@ -46,13 +46,26 @@
       }
     }
 
-    async function recargar() {
-      const user = (await supabase.auth.getUser()).data.user;
-      if (!user) return alert('No estás autenticado');
-      await supabase.from('recargas').insert([{ usuario_id: user.id, cantidad: 10 }]);
-      alert('¡Créditos recargados!');
-      obtenerCreditos();
-    }
+async function recargar() {
+  const boton = event.target;
+  boton.disabled = true;
+  boton.textContent = 'Recargando...';
+
+  const user = (await supabase.auth.getUser()).data.user;
+  if (!user) {
+    alert('No estás autenticado');
+    boton.disabled = false;
+    boton.textContent = 'Recargar 10 créditos';
+    return;
+  }
+
+  await supabase.from('recargas').insert([{ usuario_id: user.id, cantidad: 10 }]);
+  alert('¡Créditos recargados!');
+  await obtenerCreditos();
+
+  boton.disabled = false;
+  boton.textContent = 'Recargar 10 créditos';
+}
 
 async function comprar() {
   const user = (await supabase.auth.getUser()).data.user;
