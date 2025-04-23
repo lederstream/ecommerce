@@ -11,27 +11,25 @@
   <p id="precioServicio">Precio: -</p>
 
   <h2>Acciones</h2>
-  <button id="btnRecargar">Recargar 10 créditos</button>
-  <button id="btnComprar">Comprar servicio</button>
+  <button onclick="recargar(event)">Recargar 10 créditos</button>
+  <button onclick="comprar(event)">Comprar servicio</button>
 
   <script>
-    const supabase = supabase.createClient(
+    const supabaseClient = supabase.createClient(
       'https://brzsayjqohyhpssfgqct.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJyenNheWpxb2h5aHBzc2ZncWN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwMTU5MzYsImV4cCI6MjA2MDU5MTkzNn0.4JNO1yeUcuSnJXOMN_bZRlugDQZFbkyqYgWyQYkUFF8'
     );
 
     let servicios = [];
 
-    // Cargar servicios al iniciar
     async function cargarServicios() {
-      const { data, error } = await supabase.from('servicios').select('*');
+      const { data, error } = await supabaseClient.from('servicios').select('*');
       if (error) {
         console.error('Error al cargar servicios:', error);
         return;
       }
       servicios = data;
       const select = document.getElementById('servicioSelect');
-      select.innerHTML = '<option value="">-- Selecciona un servicio --</option>';
       data.forEach(servicio => {
         const option = document.createElement('option');
         option.value = servicio.id;
@@ -51,10 +49,11 @@
     }
 
     async function obtenerCreditos() {
-      const user = (await supabase.auth.getUser()).data.user;
+      const { data: userData } = await supabaseClient.auth.getUser();
+      const user = userData?.user;
       if (!user) return;
 
-      const { data, error } = await supabase
+      const { data, error } = await supabaseClient
         .from('usuarios')
         .select('creditos')
         .eq('id', user.id)
@@ -73,7 +72,8 @@
       boton.disabled = true;
       boton.textContent = 'Recargando...';
 
-      const user = (await supabase.auth.getUser()).data.user;
+      const { data: userData } = await supabaseClient.auth.getUser();
+      const user = userData?.user;
       if (!user) {
         alert('No estás autenticado');
         boton.disabled = false;
@@ -81,7 +81,7 @@
         return;
       }
 
-      await supabase.from('recargas').insert([{ usuario_id: user.id, cantidad: 10 }]);
+      await supabaseClient.from('recargas').insert([{ usuario_id: user.id, cantidad: 10 }]);
       alert('¡Créditos recargados!');
       await obtenerCreditos();
 
@@ -94,7 +94,8 @@
       boton.disabled = true;
       boton.textContent = 'Comprando...';
 
-      const user = (await supabase.auth.getUser()).data.user;
+      const { data: userData } = await supabaseClient.auth.getUser();
+      const user = userData?.user;
       if (!user) {
         alert('No estás autenticado');
         boton.disabled = false;
@@ -103,22 +104,16 @@
       }
 
       const servicioId = document.getElementById('servicioSelect').value;
-      if (!servicioId) {
-        alert('Selecciona un servicio');
-        boton.disabled = false;
-        boton.textContent = 'Comprar servicio';
-        return;
-      }
-
       const servicio = servicios.find(s => s.id == servicioId);
+
       if (!servicio) {
-        alert('Servicio no encontrado');
+        alert('Servicio no válido.');
         boton.disabled = false;
         boton.textContent = 'Comprar servicio';
         return;
       }
 
-      const { data: usuario, error: errorUsuario } = await supabase
+      const { data: usuario, error: errorUsuario } = await supabaseClient
         .from('usuarios')
         .select('creditos')
         .eq('id', user.id)
@@ -139,7 +134,7 @@
       }
 
       try {
-        await supabase.from('compras').insert([{ cliente_id: user.id, servicio_id: servicioId }]);
+        await supabaseClient.from('compras').insert([{ cliente_id: user.id, servicio_id: servicioId }]);
         alert('¡Compra realizada!');
       } catch (err) {
         alert('Error al comprar: ' + err.message);
@@ -150,11 +145,6 @@
       boton.textContent = 'Comprar servicio';
     }
 
-    // Eventos de los botones
-    document.getElementById('btnRecargar').addEventListener('click', recargar);
-    document.getElementById('btnComprar').addEventListener('click', comprar);
-
-    // Iniciar todo
     cargarServicios();
     obtenerCreditos();
   </script>
