@@ -11,8 +11,8 @@
   <p id="precioServicio">Precio: -</p>
 
   <h2>Acciones</h2>
-  <button onclick="recargar()">Recargar 10 créditos</button>
-  <button onclick="comprar()">Comprar servicio</button>
+  <button id="btnRecargar">Recargar 10 créditos</button>
+  <button id="btnComprar">Comprar servicio</button>
 
   <script>
     const supabase = supabase.createClient(
@@ -22,6 +22,7 @@
 
     let servicios = [];
 
+    // Cargar servicios al iniciar
     async function cargarServicios() {
       const { data, error } = await supabase.from('servicios').select('*');
       if (error) {
@@ -30,6 +31,7 @@
       }
       servicios = data;
       const select = document.getElementById('servicioSelect');
+      select.innerHTML = '<option value="">-- Selecciona un servicio --</option>';
       data.forEach(servicio => {
         const option = document.createElement('option');
         option.value = servicio.id;
@@ -43,140 +45,118 @@
       const servicio = servicios.find(s => s.id == selectedId);
       if (servicio) {
         document.getElementById('precioServicio').innerText = `Precio: ${servicio.precio} créditos`;
+      } else {
+        document.getElementById('precioServicio').innerText = 'Precio: -';
       }
     }
 
-async function recargar() {
-  const boton = event.target;
-  boton.disabled = true;
-  boton.textContent = 'Recargando...';
+    async function obtenerCreditos() {
+      const user = (await supabase.auth.getUser()).data.user;
+      if (!user) return;
 
-  const user = (await supabase.auth.getUser()).data.user;
-  if (!user) {
-    alert('No estás autenticado');
-    boton.disabled = false;
-    boton.textContent = 'Recargar 10 créditos';
-    return;
-  }
+      const { data, error } = await supabase
+        .from('usuarios')
+        .select('creditos')
+        .eq('id', user.id)
+        .single();
 
-  await supabase.from('recargas').insert([{ usuario_id: user.id, cantidad: 10 }]);
-  alert('¡Créditos recargados!');
-  await obtenerCreditos();
+      if (error) {
+        console.error('Error al obtener créditos:', error);
+        return;
+      }
 
-  boton.disabled = false;
-  boton.textContent = 'Recargar 10 créditos';
-}
+      document.getElementById('creditos').innerText = `Créditos disponibles: ${data.creditos}`;
+    }
 
-async function comprar() {
-async function comprar() {
-  const boton = event.target;
-  boton.disabled = true;
-  boton.textContent = 'Comprando...';
+    async function recargar(event) {
+      const boton = event.target;
+      boton.disabled = true;
+      boton.textContent = 'Recargando...';
 
-  const user = (await supabase.auth.getUser()).data.user;
-  if (!user) {
-    alert('No estás autenticado');
-    boton.disabled = false;
-    boton.textContent = 'Comprar servicio';
-    return;
-  }
+      const user = (await supabase.auth.getUser()).data.user;
+      if (!user) {
+        alert('No estás autenticado');
+        boton.disabled = false;
+        boton.textContent = 'Recargar 10 créditos';
+        return;
+      }
 
-  const servicioId = document.getElementById('servicioSelect').value;
-  if (!servicioId) {
-    alert('Selecciona un servicio');
-    boton.disabled = false;
-    boton.textContent = 'Comprar servicio';
-    return;
-  }
+      await supabase.from('recargas').insert([{ usuario_id: user.id, cantidad: 10 }]);
+      alert('¡Créditos recargados!');
+      await obtenerCreditos();
 
-  const servicio = servicios.find(s => s.id == servicioId);
-  if (!servicio) {
-    alert('Servicio no encontrado');
-    boton.disabled = false;
-    boton.textContent = 'Comprar servicio';
-    return;
-  }
+      boton.disabled = false;
+      boton.textContent = 'Recargar 10 créditos';
+    }
 
-  const { data: usuario, error: errorUsuario } = await supabase
-    .from('usuarios')
-    .select('creditos')
-    .eq('id', user.id)
-    .single();
+    async function comprar(event) {
+      const boton = event.target;
+      boton.disabled = true;
+      boton.textContent = 'Comprando...';
 
-  if (errorUsuario || !usuario) {
-    alert('No se pudieron obtener los créditos.');
-    boton.disabled = false;
-    boton.textContent = 'Comprar servicio';
-    return;
-  }
+      const user = (await supabase.auth.getUser()).data.user;
+      if (!user) {
+        alert('No estás autenticado');
+        boton.disabled = false;
+        boton.textContent = 'Comprar servicio';
+        return;
+      }
 
-  if (usuario.creditos < servicio.precio) {
-    alert('No tienes créditos suficientes.');
-    boton.disabled = false;
-    boton.textContent = 'Comprar servicio';
-    return;
-  }
+      const servicioId = document.getElementById('servicioSelect').value;
+      if (!servicioId) {
+        alert('Selecciona un servicio');
+        boton.disabled = false;
+        boton.textContent = 'Comprar servicio';
+        return;
+      }
 
-  try {
-    await supabase.from('compras').insert([{ cliente_id: user.id, servicio_id: servicioId }]);
-    alert('¡Compra realizada!');
-  } catch (err) {
-    alert('Error al comprar: ' + err.message);
-  }
+      const servicio = servicios.find(s => s.id == servicioId);
+      if (!servicio) {
+        alert('Servicio no encontrado');
+        boton.disabled = false;
+        boton.textContent = 'Comprar servicio';
+        return;
+      }
 
-  await obtenerCreditos();
-  boton.disabled = false;
-  boton.textContent = 'Comprar servicio';
-}
+      const { data: usuario, error: errorUsuario } = await supabase
+        .from('usuarios')
+        .select('creditos')
+        .eq('id', user.id)
+        .single();
 
+      if (errorUsuario || !usuario) {
+        alert('No se pudieron obtener los créditos.');
+        boton.disabled = false;
+        boton.textContent = 'Comprar servicio';
+        return;
+      }
 
-  // Obtener créditos del usuario
-  const { data: usuario, error: errorUsuario } = await supabase
-    .from('usuarios')
-    .select('creditos')
-    .eq('id', user.id)
-    .single();
+      if (usuario.creditos < servicio.precio) {
+        alert('No tienes créditos suficientes.');
+        boton.disabled = false;
+        boton.textContent = 'Comprar servicio';
+        return;
+      }
 
-  if (errorUsuario || !usuario) {
-    return alert('No se pudieron obtener los créditos del usuario.');
-  }
+      try {
+        await supabase.from('compras').insert([{ cliente_id: user.id, servicio_id: servicioId }]);
+        alert('¡Compra realizada!');
+      } catch (err) {
+        alert('Error al comprar: ' + err.message);
+      }
 
-  if (usuario.creditos < servicio.precio) {
-    return alert('No tienes créditos suficientes.');
-  }
+      await obtenerCreditos();
+      boton.disabled = false;
+      boton.textContent = 'Comprar servicio';
+    }
 
-  // Realizar la compra
-  try {
-    await supabase.from('compras').insert([{ cliente_id: user.id, servicio_id: servicioId }]);
-    alert('¡Compra realizada!');
-    obtenerCreditos();
-  } catch (err) {
-    alert('Error al comprar: ' + err.message);
-  }
-}
+    // Eventos de los botones
+    document.getElementById('btnRecargar').addEventListener('click', recargar);
+    document.getElementById('btnComprar').addEventListener('click', comprar);
 
-
+    // Iniciar todo
     cargarServicios();
     obtenerCreditos();
-    
-    async function obtenerCreditos() {
-  const user = (await supabase.auth.getUser()).data.user;
-  if (!user) return;
-
-  const { data, error } = await supabase
-    .from('usuarios')
-    .select('creditos')
-    .eq('id', user.id)
-    .single();
-
-  if (error) {
-    console.error('Error al obtener créditos:', error);
-    return;
-  }
-
-  document.getElementById('creditos').innerText = `Créditos disponibles: ${data.creditos}`;
-}
-
   </script>
 </body>
 </html>
