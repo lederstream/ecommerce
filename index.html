@@ -51,6 +51,7 @@
       if (!user) return alert('No estás autenticado');
       await supabase.from('recargas').insert([{ usuario_id: user.id, cantidad: 10 }]);
       alert('¡Créditos recargados!');
+      obtenerCreditos();
     }
 
     async function comprar() {
@@ -66,6 +67,7 @@
       } catch (err) {
         alert('Error al comprar: ' + err.message);
       }
+      obtenerCreditos();
     }
 
     cargarServicios();
