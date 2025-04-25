@@ -17,13 +17,24 @@
       'https://brzsayjqohyhpssfgqct.supabase.co',
       'Markitho15' // Contraseña Supabase ADMIN
     );
-      supabase.auth.getUser().then(({ data: { user }, error }) => {
-    if (error || !user || user.email !== 'admin@cinebestial.top') {
-      alert('Acceso denegado');
-      window.location.href = 'login.html'; // Redirige a login
-    } else {
-      cargarUsuarios(); // Solo si es admin
-    }
+      supabase.auth.getUser().then(async ({ data: { user }, error }) => {
+  if (error || !user) {
+    alert('Acceso denegado');
+    window.location.href = 'login.html';
+    return;
+  }
+
+  const { data: usuario, error: errorUsuario } = await supabase
+    .from('usuarios')
+    .select('rol')
+    .eq('id', user.id)
+    .single();
+
+  if (errorUsuario || !usuario || usuario.rol !== 'admin') {
+    alert('Acceso restringido solo para administradores.');
+    window.location.href = 'login.html';
+    return;
+  }
   });
 
     async function cargarUsuarios() {
