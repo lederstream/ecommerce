@@ -102,6 +102,17 @@
     }
 
     verificarAcceso(); // Inicia el control de acceso al cargar
+    
+     async function cerrarSesion() {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        alert('Error al cerrar sesión');
+      } else {
+        window.location.href = 'login.html?logout=1';
+      }
+    }
+
+    verificarAcceso();
   </script>
 </body>
 </html>
