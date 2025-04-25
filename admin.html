@@ -15,33 +15,33 @@
   <script>
     const supabase = supabase.createClient(
       'https://brzsayjqohyhpssfgqct.supabase.co',
-      'Markitho15' // Contraseña Supabase ADMIN
+      'Markitho15'
     );
-      supabase.auth.getUser().then(async ({ data: { user }, error }) => {
-  if (error || !user) {
-    alert('Acceso denegado');
-    window.location.href = 'login.html';
-    return;
-  }
 
-  const { data: usuario, error: errorUsuario } = await supabase
-    .from('usuarios')
-    .select('rol')
-    .eq('id', user.id)
-    .single();
+    async function verificarAcceso() {
+      const { data: { user }, error: errorUser } = await supabase.auth.getUser();
+      if (errorUser || !user) {
+        alert('Debes iniciar sesión');
+        return window.location.href = 'login.html';
+      }
 
-  if (errorUsuario || !usuario || usuario.rol !== 'admin') {
-    alert('Acceso restringido solo para administradores.');
-    window.location.href = 'login.html';
-    return;
-  }
-  });
+      const { data: usuario, error: errorPerfil } = await supabase
+        .from('usuarios')
+        .select('rol')
+        .eq('id', user.id)
+        .single();
+
+      if (errorPerfil || !usuario || usuario.rol !== 'admin') {
+        alert('Acceso denegado');
+        return window.location.href = 'login.html';
+      }
+
+      cargarUsuarios(); // solo si es admin
+    }
 
     async function cargarUsuarios() {
       const { data: usuarios, error } = await supabase.from('usuarios').select('*');
-      if (error) {
-        return alert('Error al cargar usuarios');
-      }
+      if (error) return alert('Error al cargar usuarios');
 
       const tabla = `
         <table class="table table-bordered table-hover">
@@ -64,6 +64,7 @@
                     <option value="cliente" ${u.rol === 'cliente' ? 'selected' : ''}>Cliente</option>
                     <option value="distribuidor" ${u.rol === 'distribuidor' ? 'selected' : ''}>Distribuidor</option>
                     <option value="proveedor" ${u.rol === 'proveedor' ? 'selected' : ''}>Proveedor</option>
+                    <option value="admin" ${u.rol === 'admin' ? 'selected' : ''}>Admin</option>
                   </select>
                 </td>
                 <td>${u.activo ? '<span class="badge bg-success">Aprobado</span>' : '<span class="badge bg-warning text-dark">Pendiente</span>'}</td>
@@ -97,12 +98,10 @@
 
     async function cambiarRol(id, nuevoRol) {
       const { error } = await supabase.from('usuarios').update({ rol: nuevoRol }).eq('id', id);
-      if (error) {
-        alert('Error al cambiar el rol');
-      }
+      if (error) alert('Error al cambiar el rol');
     }
 
-    cargarUsuarios();
+    verificarAcceso(); // Inicia el control de acceso al cargar
   </script>
 </body>
 </html>
