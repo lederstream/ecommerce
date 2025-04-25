@@ -15,7 +15,7 @@
   <script>
     const supabase = supabase.createClient(
       'https://brzsayjqohyhpssfgqct.supabase.co',
-      'Markitho15' //TU-CLAVE-SECRETA-CON-ROL-ADMIN
+      'Markitho15'
     );
 
     async function cargarUsuarios() {
@@ -40,7 +40,13 @@
               <tr>
                 <td>${u.nombre}</td>
                 <td>${u.email}</td>
-                <td>${u.rol || 'No asignado'}</td>
+                <td>
+                  <select class="form-select form-select-sm" onchange="cambiarRol('${u.id}', this.value)">
+                    <option value="cliente" ${u.rol === 'cliente' ? 'selected' : ''}>Cliente</option>
+                    <option value="distribuidor" ${u.rol === 'distribuidor' ? 'selected' : ''}>Distribuidor</option>
+                    <option value="proveedor" ${u.rol === 'proveedor' ? 'selected' : ''}>Proveedor</option>
+                  </select>
+                </td>
                 <td>${u.activo ? '<span class="badge bg-success">Aprobado</span>' : '<span class="badge bg-warning text-dark">Pendiente</span>'}</td>
                 <td>
                   ${!u.activo ? `
@@ -68,6 +74,13 @@
       const { error } = await supabase.from('usuarios').delete().eq('id', id);
       if (error) return alert('Error al eliminar usuario');
       cargarUsuarios();
+    }
+
+    async function cambiarRol(id, nuevoRol) {
+      const { error } = await supabase.from('usuarios').update({ rol: nuevoRol }).eq('id', id);
+      if (error) {
+        alert('Error al cambiar el rol');
+      }
     }
 
     cargarUsuarios();
