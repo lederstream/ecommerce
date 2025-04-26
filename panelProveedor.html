@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel del Proveedor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body class="bg-light">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Panel Proveedor</a>
+      <button class="btn btn-outline-light ms-auto" onclick="logout()">Cerrar sesión</button>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <h3>Resumen General</h3>
+    <div class="row text-center mb-4">
+      <div class="col-md-4">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Servicios Publicados</h5>
+            <p id="total-servicios" class="display-6">0</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Ventas Realizadas</h5>
+            <p id="total-ventas" class="display-6">0</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Créditos Disponibles</h5>
+            <p id="creditos" class="display-6">S/ 0.00</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h4>Mis Servicios</h4>
+    <div id="servicios-lista" class="row"></div>
+  </div>
+
+  <script>
+    const supabase = supabase.createClient(
+      'https://brzsayjqohyhpssfgqct.supabase.co',
+      'public-key-aqui' // Reemplazar con tu clave pública
+    );
+
+    async function getProveedor() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const { data, error } = await supabase.from('usuarios').select('*').eq('email', user.email).single();
+      if (error || !data || data.rol !== 'proveedor') {
+        alert('Acceso restringido');
+        window.location.href = 'login.html';
+        return;
+      }
+
+      cargarResumen(data.id);
+    }
+
+    async function cargarResumen(proveedor_id) {
+      const { data: servicios } = await supabase.from('servicios').select('*').eq('proveedor_id', proveedor_id);
+      document.getElementById('total-servicios').textContent = servicios.length;
+
+      const { data: ventas } = await supabase.from('ventas').select('*').eq('proveedor_id', proveedor_id);
+      document.getElementById('total-ventas').textContent = ventas.length;
+
+      const { data: proveedor } = await supabase.from('usuarios').select('creditos').eq('id', proveedor_id).single();
+      document.getElementById('creditos').textContent = `S/ ${proveedor.creditos || 0}`;
+
+      mostrarServicios(servicios);
+    }
+
+    function mostrarServicios(servicios) {
+      const contenedor = document.getElementById('servicios-lista');
+      contenedor.innerHTML = servicios.map(s => `
+        <div class="col-md-4 mb-3">
+          <div class="card h-100">
+            <img src="${s.imagen}" class="card-img-top" alt="imagen servicio">
+            <div class="card-body">
+              <h5 class="card-title">${s.titulo}</h5>
+              <p class="card-text">${s.descripcion}</p>
+              <p class="text-muted">Stock: ${s.stock}</p>
+              <p><span class="badge bg-success">Precio Cliente: S/ ${s.precio_publico}</span></p>
+              <p><span class="badge bg-primary">Precio Dist: S/ ${s.precio_distribuidor}</span></p>
+            </div>
+          </div>
+        </div>`
+      ).join('');
+    }
+
+    function logout() {
+      supabase.auth.signOut().then(() => {
+        window.location.href = 'login.html';
+      });
+    }
+
+    getProveedor();
+  </script>
+</body>
+</html>
