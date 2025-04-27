@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Servicio | Cinebestial</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body class="bg-light">
+  <nav class="navbar navbar-light bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand" href="panel_proveedor.html">← Volver</a>
+    </div>
+  </nav>
+
+  <div class="container py-5">
+    <h1 class="mb-4 text-center">Editar Servicio</h1>
+
+    <form id="form-editar-servicio" class="card p-4 shadow-sm">
+      <div class="mb-3">
+        <label for="titulo" class="form-label">Título</label>
+        <input type="text" class="form-control" id="titulo" required>
+      </div>
+      <div class="mb-3">
+        <label for="descripcion" class="form-label">Descripción</label>
+        <textarea class="form-control" id="descripcion" rows="3" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="imagen" class="form-label">URL de la Imagen</label>
+        <input type="url" class="form-control" id="imagen" required>
+      </div>
+      <div class="mb-3">
+        <label for="precio_publico" class="form-label">Precio Público (S/)</label>
+        <input type="number" class="form-control" id="precio_publico" required>
+      </div>
+      <div class="mb-3">
+        <label for="precio_distribuidor" class="form-label">Precio Distribuidor (S/)</label>
+        <input type="number" class="form-control" id="precio_distribuidor" required>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Guardar Cambios</button>
+    </form>
+
+    <div id="mensaje" class="text-center mt-4"></div>
+  </div>
+
+  <script>
+    const supabase = supabase.createClient(
+      'https://brzsayjqohyhpssfgqct.supabase.co',
+      'TU_PUBLIC_ANON_KEY'
+    );
+
+    let servicioId = new URLSearchParams(window.location.search).get('id');
+
+    async function cargarServicio() {
+      const { data: servicio, error } = await supabase
+        .from('servicios')
+        .select('*')
+        .eq('id', servicioId)
+        .single();
+
+      if (error || !servicio) {
+        document.getElementById('mensaje').innerHTML = '<div class="alert alert-danger">Error al cargar el servicio.</div>';
+        return;
+      }
+
+      document.getElementById('titulo').value = servicio.titulo;
+      document.getElementById('descripcion').value = servicio.descripcion;
+      document.getElementById('imagen').value = servicio.imagen;
+      document.getElementById('precio_publico').value = servicio.precio_publico;
+      document.getElementById('precio_distribuidor').value = servicio.precio_distribuidor;
+    }
+
+    document.getElementById('form-editar-servicio').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const servicioActualizado = {
+        titulo: document.getElementById('titulo').value,
+        descripcion: document.getElementById('descripcion').value,
+        imagen: document.getElementById('imagen').value,
+        precio_publico: parseFloat(document.getElementById('precio_publico').value),
+        precio_distribuidor: parseFloat(document.getElementById('precio_distribuidor').value),
+      };
+
+      const { error } = await supabase.from('servicios').update(servicioActualizado).eq('id', servicioId);
+
+      if (error) {
+        document.getElementById('mensaje').innerHTML = '<div class="alert alert-danger">Error al actualizar el servicio.</div>';
+      } else {
+        document.getElementById('mensaje').innerHTML = '<div class="alert alert-success">¡Servicio actualizado exitosamente!</div>';
+      }
+    });
+
+    (async () => {
+      await cargarServicio();
+    })();
+  </script>
+</body>
+</html>
