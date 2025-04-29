@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CINEBESTIAL | Streaming Premium</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- Header importado -->
+    <div id="header-container"></div>
+
+    <!-- Contenido principal -->
+    <main>
+        <section class="hero-section">
+            <div class="container text-center">
+                <h1 class="display-4 fw-bold mb-3">Cuentas Premium de Streaming</h1>
+                <p class="lead text-secondary mb-4">La mejor selección de plataformas digitales a precios imbatibles</p>
+                <a href="#products" class="btn btn-accent btn-lg px-4">Ver Productos</a>
+            </div>
+        </section>
+
+        <section id="products" class="py-5">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center mb-5">
+                    <h2 class="fw-bold">Nuestros Servicios</h2>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown">
+                            Filtrar por plataforma
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item filter-option" data-platform="all">Todas</a></li>
+                            <li><a class="dropdown-item filter-option" data-platform="Netflix">Netflix</a></li>
+                            <li><a class="dropdown-item filter-option" data-platform="Disney+">Disney+</a></li>
+                            <li><a class="dropdown-item filter-option" data-platform="HBO Max">HBO Max</a></li>
+                            <li><a class="dropdown-item filter-option" data-platform="HBO Max">Spotify</a></li>
+
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="row g-4" id="products-container">
+                    <!-- Productos cargados dinámicamente -->
+                </div>
+            </div>
+        </section>
+
+        <section id="add-product" class="py-5 bg-dark">
+            <div class="container">
+                <h2 class="fw-bold mb-5 text-center">Agregar Nuevo Servicio</h2>
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <!-- Formulario importado -->
+                        <div id="product-form-container"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer importado -->
+    <div id="footer-container"></div>
+
+    <!-- Modal de Login -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-secondary">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Acceso Exclusivo</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="login-form">
+                        <div class="mb-3">
+                            <label for="login-email" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="login-email" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="login-password" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="login-password" required>
+                        </div>
+                        <button type="submit" class="btn btn-accent w-100 py-2">Ingresar</button>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 justify-content-center">
+                    <p class="small mb-0">¿No tienes cuenta? <a href="#" class="text-accent">Solicita acceso</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/supabase.js"></script>
+    <script type="module" src="js/products.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    
+    <script>
+        // Cargar partials
+        async function loadPartials() {
+            const header = await fetch('partials/header.html');
+            const footer = await fetch('partials/footer.html');
+            const productForm = await fetch('partials/add-product-form.html');
+            
+            document.getElementById('header-container').innerHTML = await header.text();
+            document.getElementById('footer-container').innerHTML = await footer.text();
+            document.getElementById('product-form-container').innerHTML = await productForm.text();
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPartials();
+            checkAuthState();
+        });
+    </script>
+</body>
+</html>
