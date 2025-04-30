@@ -11,7 +11,7 @@ export async function checkAuthState() {
   }
 
   // Verifica si el correo es el tuyo o el de tu hermana
-  const allowedEmails = ['tucorreo@gmail.com', 'correohermana@gmail.com'] // <-- CAMBIA ESTO
+  const allowedEmails = ['yanamarco017@gmail.com', 'correohermana@gmail.com'] // <-- CAMBIA ESTO
   if (!allowedEmails.includes(user.email)) {
     alert('No tienes permiso para administrar productos.')
     await supabase.auth.signOut()
