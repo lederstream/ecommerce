@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - CINEBESTIAL</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/styles.css">
+    <style>
+        :root {
+            --sidebar-width: 250px;
+        }
+        .admin-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+        .admin-sidebar {
+            width: var(--sidebar-width);
+            background: #1e293b;
+            color: white;
+            transition: all 0.3s;
+            position: fixed;
+            height: 100vh;
+            z-index: 1000;
+        }
+        .admin-main {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: all 0.3s;
+        }
+        .sidebar-brand {
+            padding: 1.5rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+        .sidebar-menu a {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1.5rem;
+            display: block;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            color: white;
+            background: rgba(59, 130, 246, 0.2);
+            border-left: 3px solid #3b82f6;
+        }
+        .sidebar-menu a i {
+            margin-right: 0.5rem;
+            width: 20px;
+            text-align: center;
+        }
+        .admin-navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .admin-content {
+            padding: 1.5rem;
+        }
+        .stat-card {
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .stat-card-header {
+            padding: 1rem;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+        .stat-card-header i {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+        .stat-card-body {
+            padding: 1.5rem;
+            background: white;
+        }
+        .stat-card-body h3 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .stat-card-body p {
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                margin-left: calc(-1 * var(--sidebar-width));
+            }
+            .admin-sidebar.active {
+                margin-left: 0;
+            }
+            .admin-main {
+                margin-left: 0;
+            }
+            .admin-main.active {
+                margin-left: var(--sidebar-width);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-wrapper">
+        <!-- Sidebar -->
+        <div class="admin-sidebar animate__animated animate__fadeInLeft">
+            <div class="sidebar-brand">
+                <h4 class="fw-bold mb-0">
+                    <i class="fas fa-film me-2"></i>CINE<span class="text-primary">BESTIAL</span>
+                </h4>
+                <small class="text-muted">Panel de Administración</small>
+            </div>
+            <div class="sidebar-menu">
+                <a href="index.html" class="active">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="productos.html">
+                    <i class="fas fa-boxes"></i> Productos
+                </a>
+                <a href="#">
+                    <i class="fas fa-shopping-cart"></i> Ventas
+                </a>
+                <a href="#">
+                    <i class="fas fa-users"></i> Clientes
+                </a>
+                <a href="#">
+                    <i class="fas fa-chart-line"></i> Reportes
+                </a>
+                <a href="#">
+                    <i class="fas fa-cog"></i> Configuración
+                </a>
+                <a href="#" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="admin-main animate__animated animate__fadeInRight">
+            <!-- Navbar -->
+            <nav class="admin-navbar">
+                <div class="d-flex justify-content-between align-items-center">
+                    <button class="btn btn-outline-secondary d-md-none" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="d-flex align-items-center">
+                        <div class="dropdown">
+                            <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle me-1"></i>
+                                <span id="usernameDisplay">Administrador</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Configuración</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" id="logoutBtn2"><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Content -->
+            <div class="admin-content">
+                <h4 class="fw-bold mb-4">Dashboard</h4>
+                
+                <div class="row">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="stat-card shadow-sm">
+                            <div class="stat-card-header bg-primary">
+                                <i class="fas fa-box"></i>
+                                <h5 class="mb-0">Productos</h5>
+                            </div>
+                            <div class="stat-card-body">
+                                <h3 id="totalProducts">0</h3>
+                                <p>Total de productos</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="stat-card shadow-sm">
+                            <div class="stat-card-header bg-success">
+                                <i class="fas fa-shopping-cart"></i>
+                                <h5 class="mb-0">Ventas</h5>
+                            </div>
+                            <div class="stat-card-body">
+                                <h3 id="totalSales">0</h3>
+                                <p>Ventas este mes</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="stat-card shadow-sm">
+                            <div class="stat-card-header bg-warning">
+                                <i class="fas fa-users"></i>
+                                <h5 class="mb-0">Clientes</h5>
+                            </div>
+                            <div class="stat-card-body">
+                                <h3 id="totalCustomers">0</h3>
+                                <p>Clientes registrados</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="stat-card shadow-sm">
+                            <div class="stat-card-header bg-info">
+                                <i class="fas fa-dollar-sign"></i>
+                                <h5 class="mb-0">Ingresos</h5>
+                            </div>
+                            <div class="stat-card-body">
+                                <h3 id="totalRevenue">$0</h3>
+                                <p>Ingresos este mes</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-lg-8">
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold mb-0">Ventas Recientes</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Producto</th>
+                                                <th>Cliente</th>
+                                                <th>Fecha</th>
+                                                <th>Total</th>
+                                                <th>Estado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="recentSalesTable">
+                                            <!-- Las ventas se cargarán aquí -->
+                                            <tr>
+                                                <td colspan="6" class="text-center py-4">
+                                                    <div class="spinner-border text-primary" role="status">
+                                                        <span class="visually-hidden">Cargando...</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold mb-0">Productos Populares</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush" id="popularProductsList">
+                                    <!-- Los productos populares se cargarán aquí -->
+                                    <li class="list-group-item text-center py-4">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Cargando...</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Custom JS -->
+    <script src="../../js/auth.js"></script>
+    <script>
+        // Configuración de Supabase
+        const supabaseUrl = 'TU_SUPABASE_URL';
+        const supabaseKey = 'TU_SUPABASE_KEY';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        
+        // Toggle sidebar en móviles
+        document.getElementById('sidebarToggle').addEventListener('click', () => {
+            document.querySelector('.admin-sidebar').classList.toggle('active');
+            document.querySelector('.admin-main').classList.toggle('active');
+        });
+        
+        // Cerrar sesión
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await supabase.auth.signOut();
+            window.location.href = 'login.html';
+        });
+        
+        document.getElementById('logoutBtn2').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await supabase.auth.signOut();
+            window.location.href = 'login.html';
+        });
+        
+        // Cargar datos del dashboard
+        async function loadDashboardData() {
+            try {
+                // Obtener información del usuario
+                const { data: { user } } = await supabase.auth.getUser();
+                if (user) {
+                    document.getElementById('usernameDisplay').textContent = user.email;
+                }
+                
+                // Obtener estadísticas
+                const { count: productCount } = await supabase
+                    .from('products')
+                    .select('*', { count: 'exact', head: true });
+                
+                document.getElementById('totalProducts').textContent = productCount || 0;
+                
+                // Aquí puedes agregar más consultas para ventas, clientes, etc.
+                
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDashboardData();
+        });
+    </script>
+</body>
+</html>
