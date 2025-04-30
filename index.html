@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CINEBESTIAL - Servicios Digitales Premium</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top animate__animated animate__fadeIn">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fas fa-film me-2"></i>CINE<span class="text-primary">BESTIAL</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="productos.html">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Beneficios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contacto</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary ms-2 text-white" href="admin/login.html">
+                            <i class="fas fa-lock me-1"></i> Admin
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section text-white">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center">
+                <div class="col-lg-6 animate__animated animate__fadeInLeft">
+                    <h1 class="display-3 fw-bold mb-4">Servicios Digitales <span class="text-primary">Premium</span></h1>
+                    <p class="lead mb-4">Acceso a las mejores plataformas de streaming, VPNs, paneles y más a precios increíbles.</p>
+                    <a href="productos.html" class="btn btn-primary btn-lg px-4 me-2 animate__animated animate__pulse animate__infinite">
+                        <i class="fas fa-shopping-cart me-2"></i>Ver Productos
+                    </a>
+                    <a href="#features" class="btn btn-outline-light btn-lg px-4">
+                        <i class="fas fa-info-circle me-2"></i>Más Info
+                    </a>
+                </div>
+                <div class="col-lg-6 d-none d-lg-block animate__animated animate__fadeInRight">
+                    <img src="assets/images/hero-image.png" alt="Servicios Digitales" class="img-fluid floating">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5 animate__animated animate__fadeInDown">
+                <h2 class="fw-bold">¿Por qué elegir <span class="text-primary">CINEBESTIAL</span>?</h2>
+                <p class="lead text-muted">Las mejores soluciones digitales en un solo lugar</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4 animate__animated animate__fadeInUp" data-animation-delay="0.1s">
+                    <div class="card h-100 border-0 shadow-sm hover-effect">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box bg-primary bg-opacity-10 text-primary mb-4">
+                                <i class="fas fa-bolt fa-2x"></i>
+                            </div>
+                            <h5 class="fw-bold">Rápido y Confiable</h5>
+                            <p class="text-muted">Activación inmediata y soporte 24/7 para todos nuestros productos.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 animate__animated animate__fadeInUp" data-animation-delay="0.2s">
+                    <div class="card h-100 border-0 shadow-sm hover-effect">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box bg-success bg-opacity-10 text-success mb-4">
+                                <i class="fas fa-wallet fa-2x"></i>
+                            </div>
+                            <h5 class="fw-bold">Precios Competitivos</h5>
+                            <p class="text-muted">Los mejores precios del mercado con garantía de calidad.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 animate__animated animate__fadeInUp" data-animation-delay="0.3s">
+                    <div class="card h-100 border-0 shadow-sm hover-effect">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box bg-info bg-opacity-10 text-info mb-4">
+                                <i class="fas fa-shield-alt fa-2x"></i>
+                            </div>
+                            <h5 class="fw-bold">Seguridad Garantizada</h5>
+                            <p class="text-muted">Protección de datos y transacciones seguras en todas tus compras.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Categories -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5 animate__animated animate__fadeInDown">
+                <h2 class="fw-bold">Nuestras <span class="text-primary">Categorías</span></h2>
+                <p class="lead text-muted">Explora nuestros servicios digitales</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-3 col-6 animate__animated animate__zoomIn">
+                    <a href="productos.html?category=streaming" class="category-card">
+                        <div class="card border-0 shadow-sm hover-effect">
+                            <div class="card-body text-center p-4">
+                                <i class="fas fa-tv fa-3x text-danger mb-3"></i>
+                                <h5 class="fw-bold">Streaming</h5>
+                                <p class="text-muted small">Netflix, Disney+, HBO Max y más</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-6 animate__animated animate__zoomIn" data-animation-delay="0.1s">
+                    <a href="productos.html?category=vpn" class="category-card">
+                        <div class="card border-0 shadow-sm hover-effect">
+                            <div class="card-body text-center p-4">
+                                <i class="fas fa-user-shield fa-3x text-primary mb-3"></i>
+                                <h5 class="fw-bold">VPN</h5>
+                                <p class="text-muted small">Protege tu privacidad online</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-6 animate__animated animate__zoomIn" data-animation-delay="0.2s">
+                    <a href="productos.html?category=fitness" class="category-card">
+                        <div class="card border-0 shadow-sm hover-effect">
+                            <div class="card-body text-center p-4">
+                                <i class="fas fa-dumbbell fa-3x text-warning mb-3"></i>
+                                <h5 class="fw-bold">Fitness</h5>
+                                <p class="text-muted small">Smartfit y otras membresías</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-6 animate__animated animate__zoomIn" data-animation-delay="0.3s">
+                    <a href="productos.html?category=paneles" class="category-card">
+                        <div class="card border-0 shadow-sm hover-effect">
+                            <div class="card-body text-center p-4">
+                                <i class="fas fa-server fa-3x text-info mb-3"></i>
+                                <h5 class="fw-bold">Paneles</h5>
+                                <p class="text-muted small">Gestión de cuentas masivas</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-5 bg-dark text-white">
+        <div class="container">
+            <div class="text-center mb-5 animate__animated animate__fadeInDown">
+                <h2 class="fw-bold">Opiniones de <span class="text-primary">Clientes</span></h2>
+                <p class="lead">Lo que dicen nuestros clientes satisfechos</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4 animate__animated animate__fadeInUp">
+                    <div class="card bg-dark border border-secondary hover-effect">
+                        <div class="card-body p-4">
+                            <div class="d-flex mb-3">
+                                <img src="https://randomuser.me/api/portraits/women/32.jpg" class="rounded-circle me-3" width="50" alt="Cliente">
+                                <div>
+                                    <h6 class="mb-0">María González</h6>
+                                    <div class="text-warning small">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mb-0">"Excelente servicio! Mi cuenta de Netflix se activó en minutos. Llevo 6 meses sin problemas."</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 animate__animated animate__fadeInUp" data-animation-delay="0.1s">
+                    <div class="card bg-dark border border-secondary hover-effect">
+                        <div class="card-body p-4">
+                            <div class="d-flex mb-3">
+                                <img src="https://randomuser.me/api/portraits/men/45.jpg" class="rounded-circle me-3" width="50" alt="Cliente">
+                                <div>
+                                    <h6 class="mb-0">Carlos Mendoza</h6>
+                                    <div class="text-warning small">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mb-0">"El mejor precio que encontré para el VPN. Funciona perfecto para ver contenido de otros países."</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 animate__animated animate__fadeInUp" data-animation-delay="0.2s">
+                    <div class="card bg-dark border border-secondary hover-effect">
+                        <div class="card-body p-4">
+                            <div class="d-flex mb-3">
+                                <img src="https://randomuser.me/api/portraits/women/68.jpg" class="rounded-circle me-3" width="50" alt="Cliente">
+                                <div>
+                                    <h6 class="mb-0">Laura Jiménez</h6>
+                                    <div class="text-warning small">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mb-0">"Compré el paquete familiar de Disney+ y HBO Max. Todo perfecto y el soporte responde rápido."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-5 bg-primary text-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8 animate__animated animate__fadeInLeft">
+                    <h3 class="fw-bold mb-3">¿Listo para disfrutar de los mejores servicios digitales?</h3>
+                    <p class="lead mb-0">Únete a cientos de clientes satisfechos y accede a contenido premium a precios increíbles.</p>
+                </div>
+                <div class="col-lg-4 text-lg-end animate__animated animate__fadeInRight">
+                    <a href="productos.html" class="btn btn-light btn-lg px-4">
+                        <i class="fas fa-shopping-cart me-2"></i>Comprar Ahora
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 animate__animated animate__fadeInLeft">
+                    <h2 class="fw-bold mb-4">Contacta con <span class="text-primary">Nosotros</span></h2>
+                    <p class="lead mb-4">¿Tienes alguna pregunta? Escríbenos y te responderemos lo antes posible.</p>
+                    <div class="d-flex mb-3">
+                        <div class="icon-box bg-primary bg-opacity-10 text-primary me-3">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-0">Email</h6>
+                            <p class="mb-0">info@cinebestial.com</p>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <div class="icon-box bg-success bg-opacity-10 text-success me-3">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-0">WhatsApp</h6>
+                            <p class="mb-0">+1 (234) 567-890</p>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="icon-box bg-info bg-opacity-10 text-info me-3">
+                            <i class="fab fa-telegram"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-0">Telegram</h6>
+                            <p class="mb-0">@CineBestial</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mt-4 mt-lg-0 animate__animated animate__fadeInRight">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-4">Envía un mensaje</h5>
+                            <form id="contactForm">
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" placeholder="Nombre" required>
+                                </div>
+                                <div class="mb-3">
+                                    <input type="email" class="form-control" placeholder="Email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" placeholder="Asunto">
+                                </div>
+                                <div class="mb-3">
+                                    <textarea class="form-control" rows="4" placeholder="Mensaje" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-paper-plane me-2"></i>Enviar Mensaje
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h5 class="fw-bold mb-3">
+                        <i class="fas fa-film me-2"></i>CINE<span class="text-primary">BESTIAL</span>
+                    </h5>
+                    <p class="text-muted">Tu tienda confiable de servicios digitales premium. Calidad, seguridad y los mejores precios.</p>
+                    <div class="social-icons">
+                        <a href="#" class="text-white me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h6 class="fw-bold mb-3">Enlaces</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-muted">Inicio</a></li>
+                        <li class="mb-2"><a href="productos.html" class="text-muted">Productos</a></li>
+                        <li class="mb-2"><a href="#features" class="text-muted">Beneficios</a></li>
+                        <li><a href="#contact" class="text-muted">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h6 class="fw-bold mb-3">Categorías</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="productos.html?category=streaming" class="text-muted">Streaming</a></li>
+                        <li class="mb-2"><a href="productos.html?category=vpn" class="text-muted">VPN</a></li>
+                        <li class="mb-2"><a href="productos.html?category=fitness" class="text-muted">Fitness</a></li>
+                        <li><a href="productos.html?category=paneles" class="text-muted">Paneles</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <h6 class="fw-bold mb-3">Newsletter</h6>
+                    <p class="text-muted mb-3">Suscríbete para recibir ofertas exclusivas.</p>
+                    <form class="mb-3">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Tu email">
+                            <button class="btn btn-primary" type="button">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <p class="small text-muted mb-0">Prometemos no enviar spam.</p>
+                </div>
+            </div>
+            <hr class="my-4 bg-secondary">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="small text-muted mb-0">© 2023 CINEBESTIAL. Todos los derechos reservados.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <ul class="list-inline small mb-0">
+                        <li class="list-inline-item"><a href="#" class="text-muted">Términos</a></li>
+                        <li class="list-inline-item"><a href="#" class="text-muted">Privacidad</a></li>
+                        <li class="list-inline-item"><a href="#" class="text-muted">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+</body>
+</html>
