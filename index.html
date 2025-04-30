@@ -96,23 +96,5 @@
 <script src="js/supabase.js"></script>
 <script src="js/auth.js" defer></script>
 <script src="js/products.js" defer></script>
-    
-    <script>
-        // Cargar partials
-        async function loadPartials() {
-            const header = await fetch('partials/header.html');
-            const footer = await fetch('partials/footer.html');
-            const productForm = await fetch('partials/add-product-form.html');
-            
-            document.getElementById('header-container').innerHTML = await header.text();
-            document.getElementById('footer-container').innerHTML = await footer.text();
-            document.getElementById('product-form-container').innerHTML = await productForm.text();
-        }
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            loadPartials();
-            checkAuthState();
-        });
-    </script>
 </body>
 </html>
